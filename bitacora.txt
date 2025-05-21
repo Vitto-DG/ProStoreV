@@ -1,0 +1,106 @@
+CUIDADO!!
+
+Error de novato. Seguir los pasos de un tutorial desactualizado al pie de la letra.
+Instalar todo despues de revisar las versiones de las tecnologias que se usaron.
+
+##########################################
+
+En el tiempo en el que no pueda continuar con el curso, seria buena idea ir revisando todo el codigo e ir comentando
+y explicando partes del codigo mientras le consulto a la IA.
+
+#########################################
+
+
+Para iniciar la aplicacion, ejecutar en la terminal:
+
+* Asegurarnos de que estamos usando una version de node reciente.
+para ver que versiones tenemos:
+  npm ls
+
+para instalar versiones:
+  npm install -g npm@latest
+
+para seleccionar versiones ya instaladas:
+  nvm use "numero de version"
+
+
+* en la 1era terminal, "npm run dev"
+* en la 2nda terminal, "npx prisma studio"
+(nos va a abrir una interfaz en el navegador para poder visualizar la DDBB)
+* en la 3er terminal, "npx tsx ./db/seed"
+(despues de haber creado y configurado el archivo seed.tsx para pasar la info del seed a la DDBB)
+
+
+!!!!!!!!!!!
+Este error:
+
+  Seed Sample Data command fails
+  2 votos
+  Han-Nung · Clase 21 · Hace 29 días
+  import { PrismaClient } from '@prisma/client';
+
+
+
+  then calling npx tsx ./db/seed
+
+  didnt work for me..
+
+  Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+
+
+
+  then i changed:
+
+  import { PrismaClient } from '../lib/generated/prisma';
+
+  Database seeded successfully
+
+
+
+  hey all, did i miss something that i have to do this step??
+
+
+
+  CHATGPT EXPLAINATION
+
+  normally …it assumes that @prisma/client was generated to the default location (inside node_modules/@prisma/client) by: npx prisma generate
+
+  schema.prisma configuration outputs the generated client somewhere else
+
+
+
+  generator client {
+    provider = "prisma-client-js"
+    output   = "../lib/generated/prisma"  // 👈 custom output
+  }
+
+
+  Because of that, Prisma no longer generates @prisma/client in node_modules, and instead dumps the generated client in your custom folder. So when you try to import from @prisma/client, it fails — because there's nothing there!
+
+
+
+  If you're cool with this path, then continue importing from ../lib/generated/prisma.
+
+  If you'd rather go back to the default way (using @prisma/client), just remove the output line, then run:
+
+  npx prisma generate
+
+################################################
+
+
+Despues del capitulo de las validacioines de producto,
+habla sobre el Deploy y de como quiere plantear un escenario ralista
+y eso implica configurar Neon.
+
+Se debe instalar un Driver sin Servidor (Serverless Driver),
+un adaptador de Prisma
+y un paquete de enchufes o socalos web (Web Socket Package)
+
+################################################
+
+Capitulo 27. Deployment
+
+antes que nada, propone que detengamos el server,
+vayamos a la terminal y ejecutemos el comando "npm run build".
+Para countruir la produccion de manera local.
+Por que esto es algo que vamos a querer hacer antes de avanzar con Vercel.

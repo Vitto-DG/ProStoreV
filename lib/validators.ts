@@ -1,0 +1,27 @@
+import { z } from 'zod';
+import { formatNumberWithDecimal } from './utils';
+
+// This price format is probably gonna be used by other parts so
+const currency = z
+.string()
+.refine((value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(Number(value))),
+'Price must have exactly two decimal places')
+
+// Schema for inserting products
+export const insertProductSchema = z.object({
+  name: z.string().min(3, 'Name must be at least 3 characters'),
+  slug: z.string().min(3, 'Slug must be at least 3 characters'),
+  category: z.string().min(3, 'Category must be at least 3 characters'),
+  brand: z.string().min(3, 'Brand must be at least 3 characters'),
+  description: z.string().min(3, 'Description must be at least 3 characters'),
+  stock: z.coerce.number(),
+  images: z.array(z.string()).min(1, 'Product must have at least one image'),
+  isFeatured: z.boolean(),
+  banner: z.string().nullable(),
+/* Para el price, decide crear una funcion de utilidad,
+ya que considera que es algo complejo por el tema de usar numeros decimales
+con dos digitos despues del punto */
+  price: currency,
+})
+
+// After defining all this, we import it in the product components.
