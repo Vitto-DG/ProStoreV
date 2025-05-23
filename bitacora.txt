@@ -104,3 +104,26 @@ antes que nada, propone que detengamos el server,
 vayamos a la terminal y ejecutemos el comando "npm run build".
 Para countruir la produccion de manera local.
 Por que esto es algo que vamos a querer hacer antes de avanzar con Vercel.
+
+Resuelto el tema de ESlint, el npm run build funciona perfecto.
+Pero a la hora de realizar el Deploy, estoy teniendo un error para que el proceso encuentre
+un modulo.
+
+Failed to compile.
+./hello-prisma/src/caching.ts:2:32
+Type error: Cannot find module '@prisma/extension-accelerate' or its corresponding type declarations.
+  1 | import { PrismaClient } from '@prisma/client';
+> 2 | import { withAccelerate } from '@prisma/extension-accelerate';
+    |                                ^
+  3 |
+  4 | const prisma = new PrismaClient()
+  5 |   .$extends(withAccelerate());
+Next.js build worker exited with code: 1 and signal: null
+Error: Command "npm run build" exited with 1
+Exiting build container
+
+He estado revisando por muchos archivos, y todo parece en orden pero claramente algo no lo está.
+Asi que lo mejor es seguir con el curso y volver a esto mas adelante.
+
+################################################
+
