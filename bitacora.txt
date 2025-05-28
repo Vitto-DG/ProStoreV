@@ -98,7 +98,7 @@ y un paquete de enchufes o socalos web (Web Socket Package)
 
 ################################################
 
-Capitulo 27. Deployment
+Capitulo 27. Deployment - Solucionado
 
 antes que nada, propone que detengamos el server,
 vayamos a la terminal y ejecutemos el comando "npm run build".
@@ -125,5 +125,28 @@ Exiting build container
 He estado revisando por muchos archivos, y todo parece en orden pero claramente algo no lo está.
 Asi que lo mejor es seguir con el curso y volver a esto mas adelante.
 
+Solucion:
+Se habia creado un directorio llamado "Hello-Prisma" que funcionaba como una aplicacion interna
+generando conflictos con un modulo llamado "prisma/extension-accelerate" que no lograba ser encontrado.
+Asi que al eliminar ese directorio y refrescar el repositorio, todo funciono despues de unos minutos.
+
+
 ################################################
+
+Hoy Mie 28 de Mayo
+
+Capitulo 30 - Modelos en el archivo schema.prisma
+
+USER - ACCOUNT - SESSION - VERIFICATION TOKEN
+
+luego de definirlos, deberemos ejecutar dos comando sen la terminal
+Antes que nada, seleccionar la version 24 de nvm. con "nvm use 24".
+
+>npx prisma generate //Genera el Cliente de Prisma
+
+>npx prisma migrate dev --name add_user_based_tables //Creará las tablas en la base de datos.
+
+Nota: es muy importante tener la aplicacion ejecutandose. De lo contario nos indicará un error.
+
+Para verificar la creacion exitosa, podemos ejecutar el comando npx prisma studio
 
