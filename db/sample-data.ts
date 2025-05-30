@@ -1,4 +1,23 @@
+import { hashSync } from 'bcrypt-ts-edge';
+
+
 const sampleData = {
+ /*  vamos a agregar un usuario cliente y un usuario admin
+   instalamos bcrypt con compatibilidad TS y Edge con "npm install" */
+  users: [
+    {
+      name: 'Vitto',
+      email: 'admin@example.com',
+      password: hashSync('123456', 10),/* vamos a necesitar la codifica ion hash. Para eso instalamos bcrypt */
+      role: 'admin'
+    },
+    {
+      name: 'Jane',
+      email: 'client@example.com',
+      password: hashSync('12345', 10),
+      role: 'user'
+    }
+    ],
   products: [
     {
       name: 'Polo Sporting Stretch Shirt',

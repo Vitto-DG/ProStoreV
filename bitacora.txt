@@ -150,3 +150,16 @@ Nota: es muy importante tener la aplicacion ejecutandose. De lo contario nos ind
 
 Para verificar la creacion exitosa, podemos ejecutar el comando npx prisma studio
 
+################################################
+
+Hoy Jue 29 de Mayo - SignIn y SignOut cap 34
+
+Para confirmar si estamos loggeados, podemos ir a inspeccionar, coockies y veremos el authjs.seccion-TOKEN
+Tambien podemos ir a la url: localhost:3000/api/auth/session y veremos la informacion en formato JSON.
+
+################################################
+
+Hoy Vie 30 de Mayo - Callback URL Redirect cap 38
+
+Desde las cpmpus del LRC
+
