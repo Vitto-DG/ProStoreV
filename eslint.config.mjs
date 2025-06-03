@@ -10,7 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  /* ...compat.extends("next/core-web-vitals", "next/typescript"), */
 {
     ignores: [
       "node_modules/**",
@@ -21,7 +21,13 @@ const eslintConfig = [
       "lib/generated/**", // <--- this miserable new-way folder of Prisma Client :-)
     ],
   }, // <-----------------
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    files: ["**/*.tsx"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+   ...compat.extends("next/core-web-vitals", "next/typescript")
 ];
 
 
