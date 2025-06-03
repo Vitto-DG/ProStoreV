@@ -161,5 +161,16 @@ Tambien podemos ir a la url: localhost:3000/api/auth/session y veremos la inform
 
 Hoy Vie 30 de Mayo - Callback URL Redirect cap 38
 
-Desde las cpmpus del LRC
+Desde las compus del LRC. Imposible avanzar sin ir cotejando de manera efectiva\
+
+
+################################################
+
+Hoy Mar 3 de Junio - Credentials sign in formato
+
+Tengo un error por variables y funciones declaradas pero no utilizadas.
+Conflicto con ESLint, pero seguimos y ya se limpiaran los errores a medida que se usen
+
+
+
 
