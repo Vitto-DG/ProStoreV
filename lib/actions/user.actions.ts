@@ -5,6 +5,7 @@ import { signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 import { prisma } from "@/db/prisma";
+import { formatError } from "../utils";
 
 // Sign in the user with credentials
 export async function signInWithCredentials(prevState: unknown,
@@ -54,11 +55,19 @@ const planePassword = user.password;
         email: user.email,
         password: planePassword,
       });
-      return { succerss: true, message: 'User registered successfully'}
+      return { success: true, message: 'User registered successfully'}
     } catch (error) {
+      /* Aqui vamos a escribir algunos console.log para ver que tipo de mensajes
+      llegan */
+      /* console.log(error.name);
+      console.log(error.code);
+      console.log(error.errors);
+      console.log(error.meta?.target); */
+      /* Salvamos los cambios y vamos a intentar crear un usuario nuevo con info incorrecta */
         if ( isRedirectError(error)){
           throw error;
         }
-      return { success: false, message: 'User was not registered'}
+      return { success: false, message: formatError(error)}
+      /* return { success: false, message: 'User was not registered'} */
     }
   }

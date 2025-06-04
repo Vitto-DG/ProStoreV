@@ -178,4 +178,32 @@ Hoy Mier 4 de Junio - Sign Up Page & Form cap. 41
 Despues de crear el formulario de Creacion de usuario, aparece un error
 que no permite ejecutar los estilos entonces la pagina pierde su diseño.
 
+El Error descubierto al ejecutar "npm start":
+
+victoriodegiusto@Vitto-MacBook-Pro prostorevitto % npm
+start
+
+> prostorevitto@0.1.0 start
+> next start
+
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Significa que alguna instancia del proyecto ya esta usando ese puerto.
+
+La IA sugirió ejecutar el comando "lsof -i :3000", identificar el PID, y ejecutar el comando
+"kill -9 numero-del-puerto" (en este caso: 17634) o detener el servidor si es que
+lo tengo abierto en otra terminal y luego ejecutar "npm start" o "npm run dev".
+
+Solucionado
+
+
 

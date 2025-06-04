@@ -41,7 +41,6 @@ const SignUpForm = () => {
         id='name'
         name='name'
         type='text'
-        required
         autoComplete='name'
         defaultValue={signUpDefaultValues.name}
         />
@@ -51,8 +50,9 @@ const SignUpForm = () => {
         <Input
         id='email'
         name='email'
-        type='email'
-        required
+        type='text'
+       /*  required para acomodar el manejo de errore del formulario.
+        Modificar el archivo "actions/user.actions.ts" */
         autoComplete='email'
         defaultValue={signUpDefaultValues.email}
         />

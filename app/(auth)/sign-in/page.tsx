@@ -12,8 +12,9 @@ import Link from "next/link";
 import CredentialsSignInForm from "./credentials-signin-form";
 import { redirect } from 'next/navigation'
 import { auth } from "@/auth";
+
 export const metadata: Metadata = {
-  title: 'Signin',
+  title: 'Sign In',
 }
 
 
