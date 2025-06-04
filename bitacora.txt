@@ -171,6 +171,11 @@ Hoy Mar 3 de Junio - Credentials sign in formato
 Tengo un error por variables y funciones declaradas pero no utilizadas.
 Conflicto con ESLint, pero seguimos y ya se limpiaran los errores a medida que se usen
 
+################################################
 
+Hoy Mier 4 de Junio - Sign Up Page & Form cap. 41
+
+Despues de crear el formulario de Creacion de usuario, aparece un error
+que no permite ejecutar los estilos entonces la pagina pierde su diseño.
 
 

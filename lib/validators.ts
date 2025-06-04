@@ -32,3 +32,16 @@ export const signInFormSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
+
+// Schema for signing up a user
+export const signUpFormSchema = z.object({
+  name: z.string().min(3, 'Name must be at leats 3 characters'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string().min(6, 'Confirm password must be at least 6 characters'),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ['confirmPassword'],
+})
+/* a partir del .refine, lo que sucede es que de esa forma podemos comparar y validar
+lo que ingresa en la linea 40 y la 41 (password y confirmPassword) */
