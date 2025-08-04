@@ -26,7 +26,8 @@ const UserButton = async () => {
   }
   /* Designing of the Signed In Status */
 
-  const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? '';
+  const firstInitial = session.user?.name?.charAt(0).toUpperCase() ?? 'U';
+
   return <div className="flex gap-2 items-center">
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -41,10 +42,10 @@ const UserButton = async () => {
         <DropdownMenuLabel className='font-normal'>
           <div className="flex flex-col space-y-1">
             <div className="text-sm font-medium leading-none">
-            {session.user?.name}
+            {session.user?.name ?? 'Usuario'}
             </div>
             <div className="text-sm text-muted-foreground leading-none">
-            {session.user?.email}
+            {session.user?.email ?? 'No Email'}
             </div>
           </div>
         </DropdownMenuLabel>

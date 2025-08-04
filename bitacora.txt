@@ -205,5 +205,148 @@ lo tengo abierto en otra terminal y luego ejecutar "npm start" o "npm run dev".
 
 Solucionado
 
+################################################
+
+hoy Jue 12 de Junio - Error Sign In page.tsx
+
+Error: [ Server ] [31m[auth][error][0m JWTSessionError: Read more at https://errors.authjs.dev#jwtsessionerror
+    at createConsoleError (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/errors/console-error.js:27:71)
+    at handleConsoleError (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/errors/use-error-handler.js:47:54)
+    at console.error (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/globals/intercept-console-error.js:47:57)
+    at async SignInPage (rsc://React/Server/webpack-internal:///(rsc)/./app/(auth)/sign-in/page.tsx?67:29:21)
+    at SignInPage (<anonymous>)
+
+Al desplazar la linea del import redirect por debajo de la de auth en el archivo "page.tsx", se solucionaron tres errores que tenian que ver con ese archivo.
+
+################################################
+
+Hoy Vie 18 de Julio (y desde hace un tiempo) - Error Sign In Auth.ts
+
+En la terminal:
+
+[auth][error] JWTSessionError: Read more at https://errors.authjs.dev#jwtsessionerror
+[auth][cause]: TypeError: Cannot read properties of undefined (reading 'name')
+    at Module.session (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/actions/session.js:44:41)
+    at async AuthInternal (webpack-internal:///(rsc)/./node_modules/@auth/core/lib/index.js:51:24)
+    at async Auth (webpack-internal:///(rsc)/./node_modules/@auth/core/index.js:130:34)
+    at async SignInPage (webpack-internal:///(rsc)/./app/(auth)/sign-in/page.tsx:29:21)
+[auth][details]: {}
+
+En el navegador (3/3):
+
+[31m[auth][error][0m JWTSessionError: Read more at https://errors.authjs.dev#jwtsessionerror
+
+app/(auth)/sign-in/page.tsx (27:19) @ async SignInPage
+
+
+  25 | }) => {
+  26 |   const { callbackUrl } = await props.searchParams;
+> 27 |   const session = await auth();
+     |                   ^
+  28 |
+  29 |   if (session) {
+  30 |     return redirect(callbackUrl || '/');
+
+*Aparentemente tiene que ver con que no se puede leer una propiedad Name que esta vacia o no declarada o indefinida.
+
+Voy por el Capitulo 43. Detengo el curso para revisar que otros cursos tengo.
+
+**** Codigo del Curso (Linea 58):
+callbacks: {
+  async session({ session, user, trigger, token }: any){
+    /* Set the user ID from the token. Con esto asi, me daba el error:
+    asume que token.sub, token.role, y token.name existen siempre, pero en algunos casos (como al visitar la página sin sesión activa), esos valores no están definidos.
+
+Eso hace que TypeScript o el runtime diga:
+
+❌ Cannot read properties of undefined (reading 'name')
+    */
+    /* session.user.id = token.sub;
+    session.user.role = token.role; */
+    /* session.user.name = token.name; */
+/* console.log(token); */
+
+/* CHATGPT me propone esta solucion: */
+if(!session.user) session.user = {} as any;
+
+if(token?.sub) session.user.id = token.sub;
+if(token?.role) session.user.role = token.role;
+if(token?.name) session.user.name = token.name;
+    //If there is an update, set the user name
+    if(trigger === 'update' && user?.name){
+      session.user.name = user.name;
+    }
+    return session
+  },
+  async jwt({ token, user}: any) {
+    // Assing user fields to the token
+    if (user) {
+      token.id = user.id;
+      token.role = user.role;
+
+      // If user has no name, then use the email
+      if (user.name === 'NO_NAME') {
+        token.name = user.email!.split('@')[0];
+
+      // Update database to reflect the token name
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { name: token.name }
+      });
+      } else {
+        token.name = user.name;
+      }
+      return token;
+    }
+  }
+},
+} satisfies NextAuthConfig;
+/*
+Todo acerca de lo que vamos a tener disponible para agregar a este objeto, se encuentra en la
+documentacion del sitio web de NextAuth */
+export const { handlers, auth, signIn, signOut } = NextAuth(config);
+
+**** Codigo sugerido por ChatGPT para solucionar los errores.
+callbacks: {
+  async jwt({ token, user}) {
+    if (user) {
+      token.id = user.id;
+      token.role = user.role;
+
+      //Asegurar siempre que haya un nombre válido
+      token.name =
+      user.name && user.name !== 'NO_NAME'
+      ? user.name
+      : user.email?.split('@')[0] ?? 'User';
+
+      //Guardar en DB si era 'NO_NAME'
+      if (user.name === 'NO_NQME') {
+        await prisma.user.update({
+          where: {id: user.id },
+          data: { name: token.name },
+        });
+        }
+      }
+      return token;
+    },
+    async session({ session, token, trigger, user }) {
+      if(!session.user) session.user = {} as any;
+      if(token?.sub) session.user.id = token.sub;
+      if(token?.role) session.user.role = token.role;
+      if(token?.name) session.user.name = token.name;
+      if(token?.email) session.user.email = token.email;
+
+      if (trigger === 'update' && user?.name) {
+        session.user.name = user.name;
+      }
+
+      return session;
+    },
+  },
+} satisfies NextAuthConfig;
+
+export const { handlers, auth, signIn, signOut } =NextAuth(config);
+
+
 
 

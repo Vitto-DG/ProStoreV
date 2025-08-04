@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@/db/prisma';
@@ -11,38 +12,42 @@ Cada uno como un objeto hijo de "config" */
 export const config = {
   pages: {
     signIn: '/sign-in',
-    error: '/sign-out',
+    error: '/sign-in',
   },
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   adapter: PrismaAdapter(prisma),
-  providers: [CredentialsProvider({
+  providers: [
+    CredentialsProvider({
     credentials: {
-    email: { type: 'emai'},
+    email: { type: 'email'},
     password: { type: 'password'}
   },
   async authorize(credentials) {
-    if(credentials == null) return null;
+    if(!credentials) return null;
     // Find user in database
     const user = await prisma.user.findFirst({
       where: {
         email: credentials.email as string
-      }
+      },
     });
     // check if the user ecists and if the password matches
     if(user && user.password) {
-      const isMatch = compareSync(credentials.password as string, user.password)
+      const isMatch = compareSync(
+        credentials.password as string,
+        user.password
+      );
 
       //If password is correct, return user
       if(isMatch){
         return {
           id: user.id,
-          name: user.name,
+          name: user.name ?? 'NO_NAME',
           email: user.email,
           role: user.role
-        }
+        };
       }
     }
     //If user does not exist or password does not match, return null
@@ -51,39 +56,43 @@ export const config = {
 }),
 ],
 callbacks: {
-  async session({ session, user, trigger, token }: any){
-    // Set the user ID from the token
-    session.user.id = token.sub;
-    session.user.role = token.role;
-    session.user.name = token.name;
-/* console.log(token); */
-
-    //If there is an update, set the user name
-    if(trigger === 'update'){
-      session.user.name = user.name;
-    }
-    return session
-  },
-  async jwt({ token, user, trigger, session }: any) {
-    // Assing user fields to the token
+  async jwt({ token, user}) {
     if (user) {
+      token.id = user.id;
       token.role = user.role;
-      // If user has no name, then use the email
-      if (user.name === 'NO_NAME') {
-        token.name = user.email!.split('@')[0];
 
-      // Update database to reflect the token name
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { name: token.name }
-      });
+      //Asegurar siempre que haya un nombre válido
+      token.name =
+        user.name && user.name !== 'NO_NAME'
+          ? user.name
+          : user.email?.split('@')[0] ?? 'User';
+
+      //Guardar en DB si era 'NO_NAME'
+      if (user.name === 'NO_NAME') {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { name: token.name },
+        });
+        }
       }
       return token;
-    }
-  }
-},
+    },
+    async session({ session, token, trigger, user }) {
+      if(!session.user) session.user = {} as any;
+      if(token?.sub) session.user.id = token.sub;
+      if(token?.role) session.user.role = token.role;
+      if(token?.name) session.user.name = token.name;
+      if(token?.email) session.user.email = token.email;
+
+console.log(token);
+
+      if (trigger === 'update' && user?.name) {
+        session.user.name = user.name;
+      }
+
+      return session;
+    },
+  },
 } satisfies NextAuthConfig;
-/*
-Todo acerca de lo que vamos a tener disponible para agregar a este objeto, se encuentra en la
-documentacion del sitio web de NextAuth */
-export const { handlers, auth, signIn, signOut } = NextAuth(config);
+
+export const { handlers, auth, signIn, signOut } =NextAuth(config);
