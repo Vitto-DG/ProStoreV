@@ -30,6 +30,11 @@ para seleccionar versiones ya instaladas:
 * en la 3er terminal, "npx tsx ./db/seed"
 (despues de haber creado y configurado el archivo seed.tsx para pasar la info del seed a la DDBB)
 
+Para visualizar los datos en tiempo real de la base de datos:
+  Vercel:
+    https://vercel.com/vitto-dgs-projects/prostorev
+
+
 
 !!!!!!!!!!!
 Este error:
