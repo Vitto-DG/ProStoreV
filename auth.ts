@@ -25,7 +25,7 @@ export const config = {
     email: { type: 'email'},
     password: { type: 'password'}
   },
-  async authorize(credentials) {
+  async authorize(credentials, req) {
     if(!credentials) return null;
     // Find user in database
     const user = await prisma.user.findFirst({
@@ -46,7 +46,7 @@ export const config = {
           id: user.id,
           name: user.name ?? 'NO_NAME',
           email: user.email,
-          role: user.role
+          role: user.role ?? 'user'
         };
       }
     }
