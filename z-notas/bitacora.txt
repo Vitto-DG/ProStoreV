@@ -34,7 +34,103 @@ Para visualizar los datos en tiempo real de la base de datos:
   Vercel:
     https://vercel.com/vitto-dgs-projects/prostorev
 
+Detalles del curso:
 
+If you want to take your React skills to the next level and learn to use Next.js in an actual real-world project, this is the course for you. We are using Next.js, TypeScript and many other technologies to create "Prostore". A full-featured shopping platform with reviews, PayPal and Stripe integration, email receipts and more.
+
+This course is for people that already know React. Knowing the basics of Next.js is even better. You will learn how to use many different technologies together to create a full project that you can then display on your portfolio.
+
+
+
+Here is a list of some of the technologies and libraries that we'll be using:
+
+
+
+Next.js v15
+
+React v19
+
+TypeScript
+
+ES Lint
+
+PostgreSQL
+
+Prisma
+
+Zod
+
+Next Auth
+
+React Hook Form
+
+PayPal & Stripe API
+
+ShadCN UI
+
+Tailwind CSS
+
+Recharts
+
+Uploadthing
+
+Jest
+
+Even though this is a project-based course, it is not simply "watch me code". I will explain in detail what I am doing so that you can understand rather than just copy. You can then use that knowlege to create your own awesome projects.
+
+
+
+Here is a complete outline of the course sections:
+
+
+
+1. Introduction - I explain what the course is about and we go over the project and the stack.
+
+2. App Creation & Basic Layour - We create our app, the layout, setup ShadCN UI and learn how to use UI components, create a theme toggler, loading & not found pages, display some sample data.
+
+3. Database, Prisma & Product Display - We setup our Neon PostgreSQL database and the Prisma ORM. We learn to create models and migrations and how to seed data and fetch products from the database.
+
+4. Authentication With Next Auth - We create full authentication with the Next Auth library
+
+5. Add To Cart - Create a cart system with database and session integration.
+
+6.. Cart & Shipping Page - We start out checkout process with the cart page summary and the shipping address form.
+
+7. Payment Method & Order Pages - We create the other pages in our checkout process.
+
+8. PayPal Payments - Integrate the PayPal API. We even do a little unit testing with JEST.
+
+9. Order History & User Profile - Create the user area with a list of orders and the profile update page.
+
+10. Admin Dashboard - We start on the admin area and the overview page
+
+11. Admin Products & Image Uploading - We manage products from admin and implement image uploading with Uploadthing.
+
+12. Admin Users & Search - Manage users from admin and implement a search for products, orders and users in admin.
+
+13. Drawer, Carousel and Search - We create a category drawer, featured product carousel and then work on the main product search filters.
+
+14. Ratings & Reviews - We create the rating and review system.
+
+15. Stripe Payments - Use the Srtipe API and some packages to ad stripe payments.
+
+16. Email Purchase Receipts - We use the Resend service for sending emails through the app.
+
+17 - Homepage Components & Wrap Up - We add few more homepage components and then wrap up the course.
+
+Lo que aprenderás
+Build a professional ecommerce website from absolute scratch
+PayPal, Stripe and Cash On Delivery payment options
+Learn Next 15, React 19, PostgreSQL, Prisma, TypeScript & Zod
+Full Authentication, admin area, review system, featured projects, sorting, search filters, user profiles, image uploading & more
+Continuous deployment with Vercel & Git
+Shopping cart, sessions, JWT & cookies
+Learn how to write TypeSafe code with TypeScript, Zod for validation & React Hook Form for easy form management
+Full admin dashboard with stats and montly sales chart as well as product, order and user management
+¿Hay requisitos para realizar el curso?
+You should know the fundamentals of JavaScript & React
+¿Para quién es este curso?
+React developers that want to take it a step further by creating a professional-level platform
 
 !!!!!!!!!!!
 Este error:
