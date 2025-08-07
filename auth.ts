@@ -6,6 +6,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { compareSync } from 'bcrypt-ts-edge';
 import type { NextAuthConfig } from 'next-auth';
 
+
+
 /*
 Aqui se van a definir los endpoints y manejo de errores a las respectivas rutas de nuestro sitio web.
 Cada uno como un objeto hijo de "config" */
@@ -25,8 +27,13 @@ export const config = {
     email: { type: 'email'},
     password: { type: 'password'}
   },
-  async authorize(credentials, req) {
-    if(!credentials) return null;
+/*   async authorize(credentials, req) {
+    if(!credentials) return null; */
+
+    async authorize(
+      credentials: Partial<Record<'email' | 'password', unknown>>,
+      req: Request
+    ): Promise<User | null> {
     // Find user in database
     const user = await prisma.user.findFirst({
       where: {
@@ -47,14 +54,35 @@ export const config = {
           name: user.name ?? 'NO_NAME',
           email: user.email,
           role: user.role ?? 'user'
-        };
+        } as User;
       }
     }
     //If user does not exist or password does not match, return null
     return null;
   },
-}),
+}
+)
 ],
+
+  /* authorize: async (
+    Credentials: Partial<Record<"email" | "password", "unknown">>,
+    req: Request
+  ): Promise<User | null> => {
+    if(!credentials) return null;
+
+    const user = await prisma.user.findFirst({
+      where: { email: Credentials.email as string }
+    });
+    if(!user) return null;
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    };
+    } */
+
 callbacks: {
   async jwt({ token, user}) {
     if (user) {
