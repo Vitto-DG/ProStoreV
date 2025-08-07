@@ -33,7 +33,7 @@ export const config = {
     async authorize(
       credentials: Partial<Record<'email' | 'password', unknown>>,
       req: Request
-    ): Promise<User | null> {
+    ): Promise<'user' | null> {
     // Find user in database
     const user = await prisma.user.findFirst({
       where: {
