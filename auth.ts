@@ -5,7 +5,7 @@ import { prisma } from '@/db/prisma';
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compareSync } from 'bcrypt-ts-edge';
 import type { NextAuthConfig } from 'next-auth';
-
+import type { User } from 'next-auth';
 
 
 /*
@@ -33,7 +33,7 @@ export const config = {
     async authorize(
       credentials: Partial<Record<'email' | 'password', unknown>>,
       req: Request
-    ): Promise<'user' | null> {
+    ): Promise<User | null> {
     // Find user in database
     const user = await prisma.user.findFirst({
       where: {
