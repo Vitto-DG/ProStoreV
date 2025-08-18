@@ -18,7 +18,7 @@ const handleAddToCart = async () => {
   if (!res || !res.success) { /* si no es exitosa, */
     toast({
       variant: 'destructive',
-      description: res??.message ?? 'Unknown error'
+      description: res?.message ?? 'Unknown error'
     });
     return;
   }
