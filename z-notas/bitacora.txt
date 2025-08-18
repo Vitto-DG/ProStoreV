@@ -449,5 +449,139 @@ callbacks: {
 export const { handlers, auth, signIn, signOut } =NextAuth(config);
 
 
+####################################################################################
+
+Lun 11 de Agosto - Neon DB - Problema con la IP de la red de creacion del proyecto y la DDBB.
+
+SOLUCIONADO
+
+  Al intentar pushear el proyecto a una nueva rama del repositorio, me en cuentro con que
+  hay un conflicto con Neon por que la IP de la red que estoy usando ahora, no es la misma
+  que esta registrada en la configuracion del proyecto. Ya que era IP es la del barco donde
+  comence el proyecto.
+
+  Esto sucede a la altura del capitulo nro 45 del curso.
+  Donde despues de crear el esquema del carrito de compras, debo aplicar los cambion en la base de datos
+  y por ende actualizar la informacion con el comando:
+
+    npx prisma migrate dev --name add-cart
+    Environment variables loaded from .env
+    Prisma schema loaded from prisma/schema.prisma
+    Datasource "db": PostgreSQL database "neondb", schema "public" at "ep-lingering-cell-a41vv2ge-pooler.us-east-1.aws.neon.tech"
+
+    Error: P1017
+
+    Server has closed the connection.
+
+    victoriodegiusto@new-host-2 prostorevitto % npx prisma migrate dev --name add-cart
+    Environment variables loaded from .env
+    Prisma schema loaded from prisma/schema.prisma
+    Datasource "db": PostgreSQL database "neondb", schema "public" at "ep-lingering-cell-a41vv2ge-pooler.us-east-1.aws.neon.tech"
+
+    Error: P1001: Can't reach database server at `ep-lingering-cell-a41vv2ge-pooler.us-east-1.aws.neon.tech:5432`
+
+    Please make sure your database server is running at `ep-lingering-cell-a41vv2ge-pooler.us-east-1.aws.neon.tech:5432`.
 
 
+Para solucionar esto, el sitio me indica que podria cambiar de plan (tengo uno gratuito).
+
+Pero creo que podria crear un nuevo proyecto y volver a cargar los esquemas a la nueva base de datos.
+
+Entonces:
+  Cree una nueva DDBB desde Vercel/storage/neon. la nombre 'prostore-arg-db'
+    esta es la informacion:
+
+    # Recommended for most uses
+    DATABASE_URL=postgres://neondb_owner:npg_VWB4EvUbrOe5@ep-little-moon-ade467ud-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
+
+    # For uses requiring a connection without pgbouncer
+    DATABASE_URL_UNPOOLED=postgresql://neondb_owner:npg_VWB4EvUbrOe5@ep-little-moon-ade467ud.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
+
+    # Parameters for constructing your own connection string
+    PGHOST=ep-little-moon-ade467ud-pooler.c-2.us-east-1.aws.neon.tech
+    PGHOST_UNPOOLED=ep-little-moon-ade467ud.c-2.us-east-1.aws.neon.tech
+    PGUSER=neondb_owner
+    PGDATABASE=neondb
+    PGPASSWORD=npg_VWB4EvUbrOe5
+
+    # Parameters for Vercel Postgres Templates
+    POSTGRES_URL=postgres://neondb_owner:npg_VWB4EvUbrOe5@ep-little-moon-ade467ud-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
+    POSTGRES_URL_NON_POOLING=postgres://neondb_owner:npg_VWB4EvUbrOe5@ep-little-moon-ade467ud.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
+    POSTGRES_USER=neondb_owner
+    POSTGRES_HOST=ep-little-moon-ade467ud-pooler.c-2.us-east-1.aws.neon.tech
+    POSTGRES_PASSWORD=npg_VWB4EvUbrOe5
+    POSTGRES_DATABASE=neondb
+    POSTGRES_URL_NO_SSL=postgres://neondb_owner:npg_VWB4EvUbrOe5@ep-little-moon-ade467ud-pooler.c-2.us-east-1.aws.neon.tech/neondb
+    POSTGRES_PRISMA_URL=postgres://neondb_owner:npg_VWB4EvUbrOe5@ep-little-moon-ade467ud-pooler.c-2.us-east-1.aws.neon.tech/neondb?connect_timeout=15&sslmode=require
+
+    # Neon Auth environment variables for Next.js
+    NEXT_PUBLIC_STACK_PROJECT_ID=fc246d98-8519-450a-99af-bd558dc8ffde
+    NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_eb15khme87xb9nrwrgmqsj7j621ww56hve0f7b1ghkv2r
+    STACK_SECRET_SERVER_KEY=ssk_3dxjffdz5gn20apj16dbw7e7trsrsp1dmnb1dsaqgt45r
+
+
+Ahora debere indicarle a mi proyecto que use la informacion desde un nuevo archivo de variables de entorno.
+
+  En el archivo .env, debere cambiar la URL antigua por la nueva.
+    que es la que primero recomienda Vercel para muchos de los usos.
+
+Pero en el archivo .env, tambien se iran agregando llaves o codigos. Sobre todo para cuando
+entra a participar el autenticador (Next auth).
+  La app va a utilizar un codigo encriptado y dos puertos.
+
+
+Pero tengo que ir a Vercel y cambiar los datos de la DDBB. En la seccion de variables de entorno.
+
+  ejecutar el comando 'npx prisma generate', lo que cargara las variables de entorno desde el archivo '.env'.
+
+Para migrar el contenido que tenemos a la DDBB, usamos otro comando:
+  'npx prisma migrate dev --name init'
+
+Para checkear el contenido de nuestra DDBB, usamos el comando:
+  'npx prisma studio'
+
+Para pasar el contenido de nuestro archivo seed, creamos un script en el archivo 'seed.ts' y lo ejecutaremos con el siguiente comando:
+  'npx tsx ./db/seed'
+
+Luego ya podremos ejecutar la aplicacion y veremos el sitio con los productos.
+
+###################################################################################################
+
+Dom 17 Agosto - SOLUCIONADO
+
+Problema con la llave foranea entre Cart.userId -> User.id
+
+Situacion:
+  Estoy loggeado, intento agregar un producto al carrito y se me revela este mensaje de error:
+
+    'invalid prisma.cart.create() invocation: Foreing key constrint violated: Cart_userId_fkey (index)'
+
+
+    Segun CHAT-GPT:
+      Ese error de Foreign key constraint violated: Cart_userId_fkey (index) significa que cuando Prisma
+      intenta crear el registro en la tabla Cart, el valor que estás poniendo en userId no existe en la
+      tabla User (o como la hayas llamado).
+
+      Básicamente:
+
+      Prisma está respetando la relación de clave foránea (Cart.userId → User.id).
+
+      Al no encontrar un usuario con ese id, la base de datos rechaza la inserción.
+
+      Posibles causas
+      El usuario no existe en la base de datos (falta crear el registro antes de agregar el carrito).
+
+      El ID está mal (string en vez de número, o viceversa, o ID diferente).
+
+      Relación mal definida en el esquema Prisma.
+
+      No estás usando el campo correcto al pasar el userId en el create().
+
+
+  El error esta en la funcion 'addItemToCart'.
+
+*El problema era que de alguna forma, el userId que tenia uno, no coincidia con el que tenia el cart.
+  EL problema se soluciono cuando hice log out y log in de nuevo.
+  Se creó otro userId y el cart pudo crear el registro con ese userId.
+
+###################################################################################################

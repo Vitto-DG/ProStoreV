@@ -6,7 +6,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { compareSync } from 'bcrypt-ts-edge';
 import type { NextAuthConfig } from 'next-auth';
 import type { User } from 'next-auth';
-
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 /*
 Aqui se van a definir los endpoints y manejo de errores a las respectivas rutas de nuestro sitio web.
@@ -120,6 +121,32 @@ console.log(token);
 
       return session;
     },
+    authorized({ request, auth }: any){
+      // Check for session cart cookie
+      if (!request.cookies.get('sessionCartId')) {
+      // Generate new session cart id cookie
+        const sessionCartId = crypto.randomUUID();
+
+      // Clone the req headers
+      const newRequestHeaders = new Headers(request.headers);
+
+      // Create new response and add the new headers
+      const response = NextResponse.next({
+        request: {
+          headers: newRequestHeaders
+        }
+      })
+        // to see what is going on
+        /* console.log(sessionCartId);
+        return true; */
+        // Set newly generated sessionCartId in the response cookies
+        response.cookies.set('sessionCartId', sessionCartId);
+
+        return response;
+      } else {
+        return true;
+      }
+    }
   },
 } satisfies NextAuthConfig;
 
