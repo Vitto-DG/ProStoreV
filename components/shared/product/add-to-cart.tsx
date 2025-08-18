@@ -15,10 +15,10 @@ const AddToCart = ({ item }: { item: CartItem}) => {
 const handleAddToCart = async () => {
   const res = await addItemToCart(item);
 
-  if (!res.success) { /* si no es exitosa, */
+  if (!res || !res.success) { /* si no es exitosa, */
     toast({
       variant: 'destructive',
-      description: res.message
+      description: res??.message ?? 'Unknown error'
     });
     return;
   }
